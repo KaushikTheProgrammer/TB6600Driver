@@ -91,6 +91,7 @@ steppertest_EXTERNAL_OBJECTS =
 test/steppertest: test/CMakeFiles/steppertest.dir/steppertest.cpp.o
 test/steppertest: test/CMakeFiles/steppertest.dir/build.make
 test/steppertest: Stepper/libStepper.a
+test/steppertest: /usr/lib/libwiringPi.so
 test/steppertest: test/CMakeFiles/steppertest.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kaushik/Documents/TB600Driver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable steppertest"
 	cd /home/kaushik/Documents/TB600Driver/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/steppertest.dir/link.txt --verbose=$(VERBOSE)
