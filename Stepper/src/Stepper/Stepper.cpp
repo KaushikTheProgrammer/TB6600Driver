@@ -11,6 +11,13 @@ Stepper::Stepper(const int directionPin, const int pulsePin, const int microStep
 	_microStepSize = microStepSize;
 }
 
+void Stepper::absStep(const int desiredPosition) {
+	const int numSteps = desiredPosition - _currPosition;
+	relStep(numSteps);
+	_currPosition = desiredPosition;
+}
+
+
 void Stepper::relStep(const int steps) {
 	if(steps > 0) {
 		moveForward(steps);
@@ -38,3 +45,5 @@ void Stepper::moveBackward(const int steps) {
 		delayMicroseconds(50);
 	}
 }
+
+
