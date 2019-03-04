@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/steppertest.dir/steppertest.cpp.o  -o steppertest -rdynamic ../Stepper/libStepper.a -lwiringPi 

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libStepper.a  CMakeFiles/Stepper.dir/src/Stepper/Stepper.cpp.o
-/usr/bin/ranlib libStepper.a
