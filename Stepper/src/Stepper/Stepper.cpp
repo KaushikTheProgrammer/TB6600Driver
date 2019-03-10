@@ -9,9 +9,9 @@
 
 #include "Stepper.hpp"
 #include <wiringPi.h>
-
+#include <iostream>
 Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
-	wiringPiSetupGpio(); // Set up wiringPi with original pin mapping
+	wiringPiSetupGpio(); // Set up wiringPi with Broadcom pin mapping
 	
 	_directionPin = DIRECTION_PIN;
 	_pulsePin = PULSE_PIN;
@@ -53,6 +53,7 @@ void Stepper::relStep(const int STEPS) {
 	@param STEPS Number of steps to take
 */
 void Stepper::moveForward(const int STEPS) {
+	
 	for(int i = 0; i < STEPS; i += 1) {
 		digitalWrite(_directionPin, LOW);
 		digitalWrite(_pulsePin, HIGH);
@@ -60,6 +61,7 @@ void Stepper::moveForward(const int STEPS) {
 		digitalWrite(_pulsePin, LOW);
 		delayMicroseconds(50);
 	}
+
 }
 
 /**
@@ -75,6 +77,10 @@ void Stepper::moveBackward(const int STEPS) {
 		digitalWrite(_pulsePin, LOW);
 		delayMicroseconds(50);
 	}
+}
+
+int getCurrentPosition() {
+	return _currPosition;
 }
 
 

@@ -11,6 +11,8 @@ Stepper.hpp
 /home/kaushik/Documents/TB600Driver/Stepper/src/Stepper/Stepper.hpp
 wiringPi.h
 -
+iostream
+-
 
 /home/kaushik/Documents/TB600Driver/Stepper/src/Stepper/Stepper.hpp
 

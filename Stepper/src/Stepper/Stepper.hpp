@@ -12,6 +12,7 @@ public:
     Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE);	// Constructor
     void relStep(const int STEPS); // Relative motor stepping; No software tracking of shaft position
     void absStep(const int DESIRED_POSITION); // Absolute motor steppering with software tracking
+    int getCurrentPosition();
 private:
     int _microStepSize;
     int _directionPin;
