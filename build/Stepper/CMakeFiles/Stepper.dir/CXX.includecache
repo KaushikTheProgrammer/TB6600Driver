@@ -6,13 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/kaushik/Documents/TB600Driver/Stepper/src/Stepper/Stepper.cpp
+/home/kaushik/Documents/TB6600Driver/Stepper/src/Stepper/Stepper.cpp
 Stepper.hpp
-/home/kaushik/Documents/TB600Driver/Stepper/src/Stepper/Stepper.hpp
+/home/kaushik/Documents/TB6600Driver/Stepper/src/Stepper/Stepper.hpp
 wiringPi.h
 -
 iostream
 -
+math.h
+-
 
-/home/kaushik/Documents/TB600Driver/Stepper/src/Stepper/Stepper.hpp
+/home/kaushik/Documents/TB6600Driver/Stepper/src/Stepper/Stepper.hpp
 
