@@ -6,7 +6,7 @@ int main (int argc, char const* argv[]) {
 	
 	wiringPiSetupGpio();
 	
-	Stepper myStepper(14, 15, 32);
+	Stepper myStepper(14, 15, 16);
 	myStepper.relStep(6400);
 	
 	return 0;
