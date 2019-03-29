@@ -85,12 +85,6 @@ void Stepper::moveForward(const int STEPS) {
 		currentStep += 1;
 		std::cout << currDelay << std::endl;
 	}
-	
-	
-	
-	
-
-
 }
 
 /**
@@ -108,8 +102,10 @@ void Stepper::moveBackward(const int STEPS) {
 	}
 }
 
-//int getCurrentPosition() {
-//	return _currPosition;
-//}
+
+
+int getCurrentPosition() {
+	return _currPosition;
+}
 
 
