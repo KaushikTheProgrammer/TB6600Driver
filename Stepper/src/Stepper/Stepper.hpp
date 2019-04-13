@@ -13,7 +13,7 @@ class Stepper {
 	public:
 		Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE);
 		void pulse(bool direction, float pulseDelay);             // Take 1 step
-		void relStep(const int STEPS);                          // Step a certain number of times
+		void relStep(int STEPS);                          // Step a certain number of times
 		void absStep(const int DESIRED_POSITION);               // Step to a certain position
 		void setMaxAcceleration(const float MAX_ACCELERATION);  // Set max acceleration rev/s^2
 		void setMaxVelocity(const float MAX_VELOCITY);          // Set max velocity in rev/s

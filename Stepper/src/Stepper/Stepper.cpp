@@ -9,8 +9,7 @@
 
 #include "Stepper.hpp"
 #include <wiringPi.h>
-#include <math.h>
-#include <iostream>
+#include <cmath>
 
 Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
 	_directionPin = DIRECTION_PIN;
@@ -19,7 +18,7 @@ Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_S
     _maxSteps = 200 * _microStepSize;
     _initVel = 0.1 * _maxSteps;
     _maxVel = _maxSteps;
-    _maxAccel = 0.2 * _maxSteps;
+    _maxAccel = 0.5 * _maxSteps;
     _currPosition = 0;
     _multiplier = _maxAccel / pow(_frqcy, 2);
 
@@ -32,33 +31,36 @@ Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_S
  * Calculates delays for every step in the routine
  * @param STEPS Number of steps to take
 */
-void Stepper::calculateParameters(const int STEPS) {
-    float currDelay;
+void Stepper::calculateParameters(int STEPS) {
+	STEPS = std::abs(STEPS);
     
-    _stopAccel = ((pow(_maxVel, 2) - pow(_initVel, 2)) / (2 * _maxAccel));			// Stop accelerating only after a certain number of steps
-    if(_stopAccel > STEPS) {
+    float currDelay;
+    int accelSteps = _propAccel * STEPS;
+    int velSteps = STEPS - accelSteps;
+    _maxVel = accelSteps;
+    
+    currDelay = (_frqcy / pow( pow(_initVel, 2) + (2 * _maxAccel), 0.5));	// Delay for the first step [17]
+    
+    _allDelays.push_back(currDelay);										// Add it as delay
+    
+    int stepNumber = 1;
+    
+    for(stepNumber; stepNumber < accelSteps; stepNumber += 1) {
+    	currDelay = currDelay * (1 + (-1 * _multiplier * pow(currDelay, 2)));	// [20]
+    	_allDelays.push_back(currDelay);
     	
     }
     
-    
-    _startDecel = STEPS - _stopAccel;			// Start decelerating after a certain number of steps
-   	std::cout << _stopAccel << " " << _startDecel << std::endl;
-
-    currDelay = (_frqcy / pow( pow(_initVel, 2) + (2 * _maxAccel), 0.5));	// Delay for the first step [17]
-    _allDelays.push_back(currDelay);										// Add it as the first delay
-
-    // Calculate delay periods for every step in the routine after the first
-    for(int i = 1; i < STEPS; i += 1) {
-    	if(i <= _stopAccel) {
-    		currDelay = currDelay * (1 + (-1 * _multiplier * pow(currDelay, 2)));	// [20]
-    	} else if(i < _startDecel) {
-    		currDelay = _frqcy / _maxVel;
-    	} else {
-    		currDelay = currDelay * (1 + (_multiplier * pow(currDelay, 2)));	// [20]
-    	}
-        //std::cout << currDelay << std::endl;
-        _allDelays.push_back(currDelay);
+   
+    for(stepNumber; stepNumber < velSteps; stepNumber += 1) {
+    	_allDelays.push_back(currDelay);
     }
+    
+    for(stepNumber; stepNumber < STEPS; stepNumber += 1) {
+    	currDelay = currDelay * (1 + (_multiplier * pow(currDelay, 2)));	// [20]
+    	_allDelays.push_back(currDelay);
+    	
+    }   
 }
 
 /**
@@ -69,12 +71,12 @@ void Stepper::relStep(const int STEPS) {
 	
     calculateParameters(STEPS);	// Calculate delays for every step
 
-    bool isForward = true;
 
+    bool isForward = true;
+    
     if(STEPS < 0) {
         isForward = false;
     }
-        
    	for(float stepDelay : _allDelays) {
    		pulse(isForward, stepDelay);
    	}
@@ -87,7 +89,6 @@ void Stepper::relStep(const int STEPS) {
 */
 void Stepper::pulse(bool isClockwise, float pulseDelay) {
 	pulseDelay = pulseDelay * 10000;
-	//std::cout << pulseDelay << std::endl;
     if(isClockwise) {
         digitalWrite(_directionPin, LOW);
         digitalWrite(_pulsePin, HIGH);
