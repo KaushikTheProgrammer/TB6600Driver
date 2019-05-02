@@ -94,10 +94,25 @@ void Stepper::relStep(const int STEPS) {
     std::vector<float>().swap(_allDelays); // Remove all delays for this routine and force a reallocation
 }
 
+void Stepper::velStep(int STEPS, float radps) {
+    float radpsDelay = _frqcy / radps;
+    bool isForward = true;
+    
+    
+    if(STEPS < 0) {
+        isForward = false;
+    }
+
+    for(int i = 0; i < STEPS; i += 1) {
+        pulse(isForward, (int) radpsDelay);
+    }
+
+}
+
 /**
  * Move the stepper by 1 step in the given direction with the given delay
 */
-void Stepper::pulse(bool isClockwise, float pulseDelay) {
+void Stepper::pulse(bool isClockwise, int pulseDelay) {
 	pulseDelay = pulseDelay * 10000;
     if(isClockwise) {
         digitalWrite(_directionPin, LOW);

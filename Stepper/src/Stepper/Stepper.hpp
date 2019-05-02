@@ -14,6 +14,7 @@ class Stepper {
 		Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE);
 		void pulse(bool direction, float pulseDelay);             // Take 1 step
 		void relStep(int STEPS);                          // Step a certain number of times
+		void velStep(const int STEPS, float radps);                          // Step a certain number of times
 		void absStep(const int DESIRED_POSITION);               // Step to a certain position
 		void setMaxAcceleration(const float MAX_ACCELERATION);  // Set max acceleration rev/s^2
 		void setMaxVelocity(const float MAX_VELOCITY);          // Set max velocity in rev/s
@@ -40,5 +41,5 @@ class Stepper {
 		int _pulsePin;         				// Signal pin on the RPI using Broadcom pin numbers
 		
 
-		void calculateParameters(const int STEPS);  // Calculate time intervals for each step
+		void calculateParameters(int STEPS);  // Calculate time intervals for each step
 };
