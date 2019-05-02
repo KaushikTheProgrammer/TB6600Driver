@@ -20,16 +20,18 @@ class Stepper {
 		int getCurrentPosition();
 
 	private:
-		std::vector<float> _allDelays;  							// Contains time intervals for every step in the routine
-		float _multiplier;	// Multiplier [19] to calculate time interval for next step [20]
-		const float _propAccel = 0.2;   		        			// Proportion of stepper routine to be accelerating/decelerating
-		const int _frqcy = 100;               						// Frequency of timer in ticks per second (100 for RPI 3 
+		std::vector<int> _allDelays;  							// Contains time intervals for every step in the routine
 		
-		int _maxSteps; 					// Number of steps in a revolution after microstepping
+		const float _propAccel = 0.2;   		        			// Proportion of stepper routine to be accelerating/decelerating
 		float _initVel;    				// Starting velocity in steps/s
 		float _maxVel;        	// Max velocity in steps/s
+		float _maxVelDelay;        	// Max velocity in steps/s
 		float _maxAccel;	// Max acceleration in steps/s^2
 		float _currDelay;   				// Delay of the next step to be taken
+		float _multiplier;	// Multiplier [19] to calculate time interval for next step [20]
+		
+		const int _frqcy = 100;               						// Frequency of timer in ticks per second (100 for RPI 3 
+		int _maxSteps; 					// Number of steps in a revolution after microstepping
 		int _stopAccel;     				// Step number at which to stop acceleration
 		int _startDecel;      				// Step number at which to start deceleration
 		int _currPosition;				// Current Position of Stepper Shaft
