@@ -6,9 +6,9 @@ int main (int argc, char const* argv[]) {
 	
 	wiringPiSetupGpio();
 	
-	Stepper myStepper(14, 15, 16);
+	Stepper myStepper(14, 15, 1);
 	
-	myStepper.relStep(-300);
+	myStepper.absStep(1200);
 	
 	return 0;
 }
