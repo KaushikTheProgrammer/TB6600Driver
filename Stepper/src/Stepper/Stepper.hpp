@@ -40,6 +40,5 @@ class Stepper {
 		int _directionPin;  				// Direction pin on the RPI using Broadcom pin numbers
 		int _pulsePin;         				// Signal pin on the RPI using Broadcom pin numbers
 		
-
 		void calculateParameters(int STEPS);  // Calculate time intervals for each step
 };

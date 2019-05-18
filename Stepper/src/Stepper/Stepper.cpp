@@ -19,10 +19,9 @@ Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_S
     _microStepSize = MICRO_STEP_SIZE;
 
     _maxSteps = 200;
-    _initVel = 0.01;     // Start at 0.1 rev/s
-    _maxVel = 4;        // Max Velocity is 1 rev/s
-    std::cout << "max " << _maxVelDelay << std::endl;
-    _maxAccel = 0.5;    // Acceleraition is 0.5 rev/s
+    _initVel = 0.01;     // Start at 0.01 rev/s
+    _maxVel = 4;        // Max Velocity is 4 rev/s
+    _maxAccel = 0.5;    // Acceleraition is 0.5 rev/s^2
 
     _currPosition = 0;
 
@@ -39,23 +38,18 @@ void Stepper::calculateParameters(int STEPS) {
     
     float currDelay; // Delay period for each step
     int accelSteps = _propAccel * STEPS; // Step number after which acceleration should stop
-    int velSteps = STEPS - accelSteps; // Step number at which constant velocity should stop
+    int velSteps = STEPS - accelSteps; // Step number after which constant velocity should stop
 
     _maxSteps *= _microStepSize;
-    std::cout <<"maxsteps " << _maxSteps << std::endl;
 
     // Convert rev/s to steps/s
     _initVel *= _maxSteps;
-    std::cout <<"intivel " << _initVel << std::endl;
     _maxVel *= _maxSteps;
-    std::cout <<"maxvel " << _maxVel << std::endl;
     _maxAccel *= _maxSteps;
-    std::cout <<"maxaccle " << _maxAccel << std::endl;
     
-    _maxVelDelay = (_frqcy / _maxVel);        // Max Velocity is 1 rev/s
+    _maxVelDelay = (_frqcy / _maxVel);  // Delay per step that should not be exceeded
     
-    _multiplier = _maxAccel / (float) pow(_frqcy, 2); // Recalculate multiplier 
-    std::cout << "multi " << _multiplier << std::endl;
+    _multiplier = _maxAccel / (float) pow(_frqcy, 2);   // Recalculate multiplier 
 
     currDelay = (_frqcy / pow( pow(_initVel, 2) + (2 * _maxAccel), 0.5));	    // Delay for the first step [17]
     _allDelays.push_back( (int) (currDelay * 10000));										// Add it
@@ -96,7 +90,6 @@ void Stepper::relStep(const int STEPS) {
         isForward = false;
     }
    	for(float stepDelay : _allDelays) {
-   		std::cout << stepDelay << std::endl;
    		pulse(isForward, stepDelay);
    	}
 
@@ -105,7 +98,6 @@ void Stepper::relStep(const int STEPS) {
 
 void Stepper::velStep(int STEPS, float radps) {
     float radpsDelay = (_frqcy / (radps*_maxSteps)) * 10000;
-    std::cout << radpsDelay << std::endl;
     bool isForward = true;
     
     
@@ -114,7 +106,6 @@ void Stepper::velStep(int STEPS, float radps) {
     }
 
     for(int i = 0; i < STEPS; i += 1) {
-    	std::cout << "stepping" << std::endl;
         pulse(isForward, (int) radpsDelay);
     }
 
