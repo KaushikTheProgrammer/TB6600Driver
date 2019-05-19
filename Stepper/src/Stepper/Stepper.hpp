@@ -24,10 +24,10 @@ class Stepper {
 		std::vector<int> _allDelays;  							// Contains time intervals for every step in the routine
 		
 		const float _propAccel = 0.2;   		        			// Proportion of stepper routine to be accelerating/decelerating
-		float _initVel;    				// Starting velocity in steps/s
-		float _maxVel;        	// Max velocity in steps/s
-		float _maxVelDelay;        	// Max velocity in steps/s
-		float _maxAccel;	// Max acceleration in steps/s^2
+		float _initVel = 0.01;    				// Starting velocity in rev/s
+		float _maxVel = 4;        	// Max velocity in rev/s
+		float _maxVelDelay;        	// Delay for max velocity
+		float _maxAccel = 0.5;	// Max acceleration in rev/s^2
 		float _currDelay;   				// Delay of the next step to be taken
 		float _multiplier;	// Multiplier [19] to calculate time interval for next step [20]
 		

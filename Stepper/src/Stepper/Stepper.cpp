@@ -10,7 +10,6 @@
 #include "Stepper.hpp"
 #include <wiringPi.h>
 #include <cmath>
-#include <iostream>
 
 Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
     _directionPin = DIRECTION_PIN;
@@ -43,13 +42,14 @@ void Stepper::calculateParameters(int STEPS) {
     int accelSteps = _propAccel * STEPS; // Step number after which acceleration should stop
     int velSteps = STEPS - accelSteps; // Step number after which constant velocity should stop
     
+    
+    
     _multiplier = _maxAccel / (float) pow(_frqcy, 2);   // Recalculate multiplier 
 
     currDelay = (_frqcy / pow( pow(_initVel, 2) + (2 * _maxAccel), 0.5));	    // Delay for the first step [17]
     _allDelays.push_back( (int) (currDelay * 10000));										// Add it
     
     int stepNumber = 1;
-    std::cout << "init" <<_initVel <<std::endl;
     
     for(stepNumber; stepNumber < accelSteps; stepNumber += 1) {
     	currDelay = currDelay * (1 + (-1 * _multiplier * pow(currDelay, 2)));	// [20]
@@ -62,17 +62,14 @@ void Stepper::calculateParameters(int STEPS) {
         currDelay = _maxVelDelay;
         
     }
-    std::cout << "maxvel" << _maxVelDelay << std::endl;
 
     for(stepNumber; stepNumber < velSteps; stepNumber += 1) {
     	_allDelays.push_back( (int) (currDelay * 10000));
-    	std::cout << currDelay << std::endl;
     }
     
     for(stepNumber; stepNumber < STEPS; stepNumber += 1) {
     	currDelay = currDelay * (1 + (_multiplier * pow(currDelay, 2)));	// [20]
     	_allDelays.push_back((int) (currDelay * 10000));
-    	std::cout << currDelay << std::endl;
     }   
 }
 
@@ -136,7 +133,6 @@ void Stepper::pulse(bool isClockwise, int pulseDelay) {
 */
 void Stepper::absStep(const int DESIRED_POSITION) {
     const int NUM_STEPS = DESIRED_POSITION - _currPosition; // Number of steps to take to reach DESIRED_POSITION
-    std::cout << NUM_STEPS << std::endl;
     relStep(NUM_STEPS); // Move to reach DESIRED_POSITION
     _currPosition = DESIRED_POSITION; // DESIRED_POSITION has been reached
 }
