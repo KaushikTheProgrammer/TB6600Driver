@@ -9,18 +9,24 @@
 
 #include "Stepper.hpp"
 #include <wiringPi.h>
+#include <exception>
 #include <cmath>
+
 
 Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
     _directionPin = DIRECTION_PIN;
     _pulsePin = PULSE_PIN;
+
+    _frqcy = 100;
+
+    _propAccel = 0.2;
     
     _microStepSize = MICRO_STEP_SIZE;
 
     _maxSteps = 200 * _microStepSize;
-    _initVel *= _maxSteps;
-    _maxVel *= _maxSteps;
-    _maxAccel *= _maxSteps;
+    _initVel = 0.01 * _maxSteps;
+    _maxVel = 4 * _maxSteps;
+    _maxAccel = 0.5 * _maxSteps;
     _maxVelDelay = (_frqcy / _maxVel);
 
     _currPosition = 0;
@@ -92,7 +98,6 @@ void Stepper::relStep(const int STEPS) {
 */
 void Stepper::velStep(int STEPS, float SPS) {
     float spsDelay = (_frqcy / SPS) * 10000; // [18]
-    
     bool isForward = true;
     
     if(STEPS < 0) {
