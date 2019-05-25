@@ -135,7 +135,6 @@ void Stepper::pulse(bool IS_CLOCKWISE, int PULSE_DELAY) {
 void Stepper::absStep(const int DESIRED_POSITION) {
     const int NUM_STEPS = DESIRED_POSITION - _currPosition; // Number of steps to take to reach DESIRED_POSITION
     relStep(NUM_STEPS);
-    _currPosition = DESIRED_POSITION;
 }
 
 /**
