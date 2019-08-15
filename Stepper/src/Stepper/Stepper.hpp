@@ -24,15 +24,15 @@ class Stepper {
 	private:
 		std::vector<int> _allDelays;  							// Contains time intervals for every step in the routine
 		
-		const float _propAccel = 0.2;   		        			// Proportion of stepper routine to be accelerating/decelerating
-		float _initVel = 0.01;    				// Starting velocity in rev/s
-		float _maxVel = 4;        	// Max velocity in rev/s
-		float _maxAccel = 0.5;	// Max acceleration in rev/s^2
+		const float _propAccel;   		        			// Proportion of stepper routine to be accelerating/decelerating
+		float _initVel;    				// Starting velocity in rev/s
+		float _maxVel;        	// Max velocity in rev/s
+		float _maxAccel;	// Max acceleration in rev/s^2
 		float _maxVelDelay;        	// Delay for max velocity
 		float _currDelay;   				// Delay of the next step to be taken
 		float _multiplier;	// Multiplier [19] to calculate time interval for next step [20]
 		
-		const int _frqcy = 100;               						// Frequency of timer in ticks per second (100 for RPI 3)
+		const int _frqcy;               						// Frequency of timer in ticks per second (100 for RPI 3)
 		int _maxSteps; 					// Number of steps in a revolution after microstepping
 		int _currPosition;				// Current Position of Stepper Shaft
 		int _microStepSize; 			// Microstepping size in microsteps/step: 1/2, 1/4 would be 2, 4 etc.
