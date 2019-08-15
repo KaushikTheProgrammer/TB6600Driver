@@ -14,11 +14,12 @@ class Stepper {
 		Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE);
 		void pulse(bool direction, int pulseDelay);             // Take 1 step
 		void relStep(int STEPS);                          // Step a certain number of times
-		void velStep(const int STEPS, float radps);                          // Step a certain number of times
+		void velStep(const int STEPS, float revps);                          // Step a certain number of times
 		void absStep(const int DESIRED_POSITION);               // Step to a certain position
 		void setAcceleration(const float MAX_ACCELERATION);  // Set max acceleration rev/s^2
 		void setMaxVelocity(const float MAX_VELOCITY);          // Set max velocity in rev/s
 		int getCurrentPosition();
+		int setCurrentPosition(int POSITION);
 
 	private:
 		std::vector<int> _allDelays;  							// Contains time intervals for every step in the routine
@@ -35,8 +36,8 @@ class Stepper {
 		int _maxSteps; 					// Number of steps in a revolution after microstepping
 		int _currPosition;				// Current Position of Stepper Shaft
 		int _microStepSize; 			// Microstepping size in microsteps/step: 1/2, 1/4 would be 2, 4 etc.
-		int _directionPin;  				// Direction pin on the RPI using Broadcom pin numbers
-		int _pulsePin;         				// Signal pin on the RPI using Broadcom pin numbers
+		int _directionPin;  				// Direction pin on the RPI using WiringPi pin numbers
+		int _pulsePin;         				// Signal pin on the RPI using WiringPi pin numbers
 		
 		void calculateParameters(int STEPS);  // Calculate time intervals for each step
 };

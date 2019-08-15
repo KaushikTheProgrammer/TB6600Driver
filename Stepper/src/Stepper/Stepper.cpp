@@ -10,8 +10,11 @@
 #include "Stepper.hpp"
 #include <wiringPi.h>
 #include <cmath>
+#include <iostream>
 
 Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
+	wiringPiSetup();
+	
     _directionPin = DIRECTION_PIN;
     _pulsePin = PULSE_PIN;
     
@@ -41,7 +44,8 @@ void Stepper::calculateParameters(int STEPS) {
     int velSteps = STEPS - accelSteps; // Step number after which constant velocity should stop
     
     _multiplier = _maxAccel / (float) pow(_frqcy, 2);   // Recalculate multiplier 
-
+	_maxVelDelay = (_frqcy / _maxVel);	// Recalculate max velocity
+	
     currDelay = (_frqcy / pow( pow(_initVel, 2) + (2 * _maxAccel), 0.5));	    // Delay for the first step [17]
     _allDelays.push_back( (int) (currDelay * 10000));
     
@@ -79,7 +83,11 @@ void Stepper::relStep(const int STEPS) {
     if(STEPS < 0) {
         isForward = false;
     }
+   	
    	for(float stepDelay : _allDelays) {
+		if(stepDelay > 1000000) {
+			continue;
+		}
    		pulse(isForward, stepDelay);
    	}
 
@@ -90,7 +98,10 @@ void Stepper::relStep(const int STEPS) {
  * Moves the stepper at constant velocity
  * @param SPS speed of the stepper in steps/s 
 */
-void Stepper::velStep(int STEPS, float SPS) {
+void Stepper::velStep(int STEPS, float REVPS) {
+	
+	float SPS = REVPS * _maxSteps;
+	
     float spsDelay = (_frqcy / SPS) * 10000; // [18]
     
     bool isForward = true;
@@ -98,11 +109,16 @@ void Stepper::velStep(int STEPS, float SPS) {
     if(STEPS < 0) {
         isForward = false;
     }
+    
+    STEPS = abs(STEPS);
 
     for(int i = 0; i < STEPS; i += 1) {
         pulse(isForward, (int) spsDelay);
     }
 }
+
+
+
 
 /**
  * Move the stepper by 1 step in the given direction with the given delay
@@ -135,10 +151,10 @@ void Stepper::absStep(const int DESIRED_POSITION) {
 
 /**
  * Sets max acceleration and converts from rev/s^2 to steps/s^2
- * @param MAX_ACCELERATION acceleration in rev/s^2
+ * @param ACCELERATION acceleration in rev/s^2
 */
 void Stepper::setAcceleration(const float ACCELERATION) {
-    _maxAccel = MAX_ACCELERATION * _maxSteps;
+    _maxAccel = ACCELERATION * _maxSteps;
 }
 
 /**
@@ -155,3 +171,11 @@ void Stepper::setMaxVelocity(const float MAX_VELOCITY) {
 int Stepper::getCurrentPosition() {
     return _currPosition;
 }
+
+/**
+ * Return current position of the motor
+*/
+int Stepper::setCurrentPosition(int POSITION) {
+    _currPosition = POSITION;
+}
+
