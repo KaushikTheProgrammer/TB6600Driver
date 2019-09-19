@@ -13,43 +13,62 @@ const int arm1Switch = 25;
 const int arm2Switch = 27;
 const int arm3Switch = 28;
 
-PI_THREAD (runArm1) {
-	
-}
 
-void homeAll() {
+void homeAxis1() {
 	std::cout << "axis1 homing" << std::endl;
-	while(!digitalRead(arm1Switch)) {
+	while(digitalRead(arm1Switch) != 1) {
 		arm1.relStep(1);
 	}
 	arm1.setCurrentPosition(0);
-	
-	while(!digitalRead(arm2Switch)) {
+}
+
+void homeAxis2() {
+	std::cout << "axis2 homing" << std::endl;
+	while(digitalRead(arm2Switch) != 1) {
 		arm2.relStep(-1);
 	}
 	arm2.setCurrentPosition(0);
-	
-	while(!digitalRead(arm3Switch)) {
+}
+
+void homeAxis3() {
+	std::cout << "axis3 homing" << std::endl;
+	int val = digitalRead(arm3Switch);
+	while(val != 1) {
+		val = digitalRead(arm3Switch);
+		std::cout << "switch3 val " << val << std::endl;
 		arm3.relStep(1);
 	}
+	std::cout << "switch3 val " << val << std::endl;
 	arm3.setCurrentPosition(0);
 }
 
-void moveArm1(int position) {
-	arm1.absStep(position);
-	arm1.setCurrentPosition(0);
+void homeAll() {
+	homeAxis1();
+	homeAxis2();
+	homeAxis3();
+}
 
+void moveArm1(int position) {
+	while(true) {
+		arm1.absStep(position);
+		arm1.absStep(-position);
+	}
+	
 }
 
 
 void moveArm2(int position) {
-	arm2.absStep(position);
-	arm2.setCurrentPosition(0);
+	while(true) {
+		arm2.absStep(position);
+		arm2.absStep(-position);
+	}
 }
 
 void moveArm3(int position) {
-	arm3.absStep(position);
-	arm3.setCurrentPosition(0);
+	while(true) {
+		arm3.absStep(position);
+		arm3.absStep(-position);
+	}
 }
 
 
@@ -60,23 +79,15 @@ void setup() {
 	pinMode(arm2Switch, INPUT);
 	pinMode(arm3Switch, INPUT);
 	
-	arm1.setAcceleration(5);
-	arm1.setMaxVelocity(10);
-	
-	arm2.setAcceleration(5);
-	arm3.setAcceleration(5);
+	arm1.setAcceleration(4);
+	arm2.setAcceleration(3.5);
+	arm3.setAcceleration(3.5);
+
 }
 
 
 int main (int argc, char const* argv[]) {
 	
-	wiringPiSetup();
-	setup();
-	
-	homeAll();
-	
-	std::thread arm1Thread(moveArm1, -1600);
-	arm1Thread.join();
 	
 	return 0;
 }
