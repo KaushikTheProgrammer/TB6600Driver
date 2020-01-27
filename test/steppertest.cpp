@@ -4,7 +4,7 @@
 #include <thread>
 
 Stepper base(9, 8, 4);
-Stepper arm1(2, 0, 4);
+Stepper arm1(2, 0, 16);
 Stepper arm2(13, 12, 4);
 Stepper arm3(22, 21, 4);
 
@@ -74,21 +74,23 @@ void moveArm3(int position) {
 
 
 void setup() {
+	wiringPiSetup();
 	pinMode(baseSwitch, INPUT);
 	pinMode(arm1Switch, INPUT);
 	pinMode(arm2Switch, INPUT);
 	pinMode(arm3Switch, INPUT);
 	
-	arm1.setAcceleration(4);
-	arm2.setAcceleration(3.5);
+	arm1.setAcceleration(1);
 	arm3.setAcceleration(3.5);
+	
+	
 
 }
 
 
 int main (int argc, char const* argv[]) {
-	
-	
+	setup();
+	arm1.absStep(-70000);
 	return 0;
 }
 
