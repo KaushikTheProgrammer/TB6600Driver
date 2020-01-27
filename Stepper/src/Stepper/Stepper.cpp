@@ -57,7 +57,7 @@ void Stepper::calculateParameters(int STEPS) {
     }
     
     // Motor should not move faster than the maximum speed
-    if(currDelay < _maxVelDelay) {
+    if(currDelay <= _maxVelDelay) {
         currDelay = _maxVelDelay;
     }
 
@@ -101,9 +101,7 @@ void Stepper::relStep(const int STEPS) {
 void Stepper::velStep(int STEPS, float REVPS) {
 	
 	float SPS = REVPS * _maxSteps;
-	
-    float spsDelay = (_frqcy / SPS) * 10000; // [18]
-    
+    float spsDelay = (_frqcy / SPS) * 10000; // [18]   
     bool isForward = true;
     
     if(STEPS < 0) {
@@ -173,9 +171,16 @@ int Stepper::getCurrentPosition() {
 }
 
 /**
- * Return current position of the motor
+ * Return number of steps for 1 full rotation
 */
-int Stepper::setCurrentPosition(int POSITION) {
+int Stepper::getMaxSteps() {
+    return _maxSteps;
+}
+
+/**
+ * Set current position of the motor
+*/
+void Stepper::setCurrentPosition(int POSITION) {
     _currPosition = POSITION;
 }
 

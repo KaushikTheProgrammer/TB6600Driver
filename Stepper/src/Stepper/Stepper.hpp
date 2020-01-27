@@ -18,8 +18,10 @@ class Stepper {
 		void absStep(const int DESIRED_POSITION);               // Step to a certain position
 		void setAcceleration(const float MAX_ACCELERATION);  // Set max acceleration rev/s^2
 		void setMaxVelocity(const float MAX_VELOCITY);          // Set max velocity in rev/s
+		void setCurrentPosition(int POSITION);
+		
 		int getCurrentPosition();
-		int setCurrentPosition(int POSITION);
+		int getMaxSteps();	
 
 	private:
 		std::vector<int> _allDelays;  							// Contains time intervals for every step in the routine
