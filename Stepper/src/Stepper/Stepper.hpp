@@ -11,7 +11,7 @@
 class Stepper {
 
 	public:
-		Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE);
+		Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE, const int GEAR_RATIO = 1);
 		void pulse(bool direction, int pulseDelay);             // Take 1 step
 		void relStep(int STEPS);                          // Step a certain number of times
 		void velStep(const int STEPS, float revps);                          // Step a certain number of times

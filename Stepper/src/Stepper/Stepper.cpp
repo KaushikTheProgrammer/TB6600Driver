@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE) {
+Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_STEP_SIZE, const int GEAR_RATIO = 1) {
 	wiringPiSetup();
 	
     _directionPin = DIRECTION_PIN;
@@ -20,7 +20,7 @@ Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_S
     
     _microStepSize = MICRO_STEP_SIZE;
 
-    _maxSteps = 200 * _microStepSize;
+    _maxSteps = 200 * _microStepSize * gearRatio;
     _initVel *= _maxSteps;
     _maxVel *= _maxSteps;
     _maxAccel *= _maxSteps;
