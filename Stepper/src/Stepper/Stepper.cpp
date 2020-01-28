@@ -20,7 +20,7 @@ Stepper::Stepper(const int DIRECTION_PIN, const int PULSE_PIN, const int MICRO_S
     
     _microStepSize = MICRO_STEP_SIZE;
 
-    _maxSteps = 200 * _microStepSize * gearRatio;
+    _maxSteps = 200 * _microStepSize * GEAR_RATIO;
     _initVel *= _maxSteps;
     _maxVel *= _maxSteps;
     _maxAccel *= _maxSteps;
