@@ -53,12 +53,12 @@ void Stepper::calculateParameters(int STEPS) {
     
     for(stepNumber; stepNumber < accelSteps; stepNumber += 1) {
     	currDelay = currDelay * (1 + (-1 * _multiplier * pow(currDelay, 2)));	// [20]
+    	
+        // Motor should not move faster than the maximum speed
+		if(currDelay <= _maxVelDelay) {
+			currDelay = _maxVelDelay;
+		}
     	_allDelays.push_back( (int) (currDelay * 10000));
-    }
-    
-    // Motor should not move faster than the maximum speed
-    if(currDelay <= _maxVelDelay) {
-        currDelay = _maxVelDelay;
     }
 
     for(stepNumber; stepNumber < velSteps; stepNumber += 1) {
